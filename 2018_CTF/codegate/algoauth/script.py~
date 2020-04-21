@@ -1,0 +1,21 @@
+
+
+
+def main():
+    array = [[]]
+    arr = []
+    
+    f = open('text')
+    lines = f.readlines() 
+    f.close()
+
+    lines_n = 0
+    for line in lines:
+        for num in line.split(' '):
+            arr.append(int(num))
+        array.append(arr)
+
+    print(array)
+
+if __name__ == '__main__':
+    main()

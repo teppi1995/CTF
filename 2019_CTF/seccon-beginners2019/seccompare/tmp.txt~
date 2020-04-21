@@ -1,0 +1,30 @@
+;; This buffer is for text that is not saved, and for Lisp evaluation.
+;; To create a file, visit it with C-x C-f and enter text in its buffer.
+
+74h
+66h
+34h
+62h
+7Bh
+35h
+74h
+72h
+31h
+6Eh
+67h
+73h
+5Fh
+31h
+73h
+5Fh
+6Eh
+30h
+74h
+5Fh
+65h
+6Eh
+30h
+75h
+67h
+68h
+7Dh

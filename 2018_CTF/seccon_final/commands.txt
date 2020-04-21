@@ -1,0 +1,77 @@
+[openssl]
+○RSA
+・1024bitのRSA秘密鍵生成
+openssl genrsa -out rsaprivatekey.pem -passout pass:hogehoge -des 1024
+
+・秘密鍵rsaprivatekey.pemから公開鍵を生成
+openssl rsa -in rsaprivatekey.pem -passin pass:trousers -pubout -out rsapulickey.pem
+
+・Modulus含む諸々のpubkey の情報表示
+oepnssl rsa -text -modulus -pubin -modulus -pubin < rsapublickey.pem
+
+・RSA公開鍵を使用して暗号化
+openssl rsautl -encrypt -pubin -inkey rsapublickey.pem -in plain.txt -out cipher.txt
+
+・複合
+openssl rsautl -decrypt -inkey rsaprivatekey.pem -in cipher.txt -outplain.txt
+
+・秘密鍵を用いて電子署名を付す
+openssl rsautl -sign -inkey rsaprivateky.pem -in plain.txt -out signature.bin
+
+・RSA電子署名を検証
+openssl rsautl -verify -pubin -inkey rsapublickey.pem -in signature -out plain.txt
+
+○Hash
+・ハッシュ値の計算
+openssl dgst -sha256 file -out dest
+
+○共通鍵暗号
+・AESのCBCモードで暗号化
+openssl enc -aes-256-cbc -salt -in plaintext.doc -out ciphertext.bin
+
+○DH
+・DHパラメータ生成
+openssl dhparam -out dhparam.pem -2 1024
+
+・dhparam.pemからDHパラメータのセットを読み込み、　Cのコードでの表現を出力
+openssl dhparam -in dhparam.pem -noout -C
+
+○DSA
+・DSAパラメータを生成
+openssl dspaparam -out dsaparam.pem 1024
+
+・DSA秘密鍵を生成
+openssl gendsa -out dsaprivatekey.pem dsaparam.pem
+
+・秘密鍵に対する公開鍵の生成
+openssl dsa -in dsaprivatekey.pem -pubout -out dsapublickey.pem
+
+[xxd]
+・１６進数表示
+xxd file.txt
+
+xxd -r file.hex
+
+xxd -b file.hex
+
+echo "targetSTR" | xxd -ps
+
+echo "targetSTR" | xxd -ps -r
+
+[bc]
+16進数での計算
+echo "obase=16;ibase=16;FF0A+FF" | bc
+
+
+[socat]
+socat TCP-LISTEN:9999,reuseaddr,fork EXEC:""
+
+[objdump]
+plt...
+	objdump -d -M intel -j .plt bof3
+
+
+[rp]
+pop gaget...
+	rp -f file -r 1 | grep pop
+	

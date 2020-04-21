@@ -1,0 +1,12 @@
+[socat]
+socat TCP-LISTEN:9999,reuseaddr,fork EXEC:""
+
+[objdump]
+plt...
+	objdump -d -M intel -j .plt bof3
+
+
+[rp]
+pop gaget...
+	rp -f file -r 1 | grep pop
+	

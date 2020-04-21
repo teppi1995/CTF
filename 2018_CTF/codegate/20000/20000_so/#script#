@@ -1,0 +1,6 @@
+
+
+for var in `echo $(($RANDOM % 20000))`
+do
+	echo $var | nc 110.10.147.106 15959
+done

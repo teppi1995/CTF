@@ -1,0 +1,7 @@
+#include <stdio.h>
+
+int main()
+{
+  a = 1;
+  return a+1;
+}
