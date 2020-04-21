@@ -1,0 +1,15 @@
+# -*- coding: utf-8 -*-
+
+filename = "encrypted_flag"
+with open("filename", "r") as file:
+  line = file.readline()
+
+  for i in range(0, 13):
+    print("[*]rot " + str(i))
+    dec_line = ""
+    for c in line:
+      dec_line += chr(ord(c) + i)
+
+    print(dec_line + "\n")
+    
+    

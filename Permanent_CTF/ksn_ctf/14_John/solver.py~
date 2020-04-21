@@ -1,0 +1,11 @@
+#!/usr/bin/python
+# -*- Coding: utf-8 -*-
+
+answer = ""
+
+with open("result.txt", "r") as f:
+    lines = f.readline()
+    for l in lines:
+        answer += l[7:8]
+
+print(answer)

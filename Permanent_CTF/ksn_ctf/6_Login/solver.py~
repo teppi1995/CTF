@@ -1,0 +1,18 @@
+#!/usr/bin/python
+# -*- Coding: utf-8 -*-
+
+from bs4 import BeautifulSoup
+import request
+
+
+
+def main():
+    payload = {
+        'id': 'admin',
+        'pass': 'secret'
+    }
+
+
+
+if __name__ == "__main__":
+    main()

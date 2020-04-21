@@ -1,0 +1,47 @@
+import sys
+import logging
+from pwn import *
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+elf = ELF("")
+# libc = ELF("")
+libc = elf.libc
+
+if len(sys.argv) == 2:
+    program_name = sys.argv[1]
+    target = process(program_name)
+    logging.info("***local exploit ***")
+    
+else:
+    HOST = sys.argv[1]
+    PORT = int(sys.argv[2])
+    logging.info("***remote exploit ***")
+    logging.info("[*]target host : " + HOST)
+    logging.info("[*]target port : " + str(PORT))
+    target = remote(HOST, PORT)
+
+    ###address###
+
+
+    ###main###
+def main():
+    logging.info("main!!")
+    
+    ###payload###
+    payload = b""
+    
+    
+    _ = target.recvuntil("")
+    target.sendline(payload)
+    ret = target.recvuntil("")
+    
+        
+    target.interactive()
+    
+if __name__ == "__main__":
+    main()
+
+
+            

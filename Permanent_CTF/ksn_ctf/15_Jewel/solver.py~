@@ -1,0 +1,27 @@
+#!/usr/bin/python
+# -*- Coding: utf-8 -*-
+
+import hashlib
+
+half_device_id = "99999991"
+hashed_device_id = "356280a58d3c437a45268a0b226d8cccad7b5dd28f5d1b37abf1873cc426a8a5"
+
+
+def find_device_id(half_id, hashed_id):
+    for i in range(10000000):
+        device_id = half_id + "{:07d}".format(i)
+        hashed = hashlib.sha256(device_id).hexdigest()
+
+        if hashed == hashed_id:
+            return device_id
+        
+def main():
+    print("[*]device id is ...")
+    device_id = find_device_id(half_device_id, hashed_device_id)
+    print(device_id)
+
+
+if __name__ == "__main__":
+    main()
+
+    

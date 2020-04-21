@@ -1,0 +1,43 @@
+import logging
+from Crypto.Cipher import AES
+import hashlib
+import re
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+message_digest = "356280a58d3c437a45268a0b226d8cccad7b5dd28f5d1b37abf1873cc426a8a5"
+phone_id1 = "99999991"
+
+IV = "kLwC29iMc4nRMuE5"
+
+def get_phone_ID():
+    for i in range(10000000):
+        ID = phone_id1 + "{:0=7}".format(i)
+        print(ID)
+        hash_ = hashlib.sha256(ID).hexdigest()
+
+        if hash_ == message_digest:
+            return ID
+
+def decryptCBCbin(encbinary, key):
+    if encbinary is None or len(encbinary) == 0:
+        raise NameError("No value given to decrypt")
+    cipher = AES.new(key, AES.MODE_CBC, IV)
+    return re.sub(b'\x08*$', b'', cipher.decrypt(encbinary)).decode()
+
+        
+
+def main():
+    password = str(get_phone_ID())
+    print("device ID was found :" + password)
+    
+    with open ("res/raw/jewel_c.png", "r") as file:
+        temp = file.read()
+
+        dec = decryptCBCbin(temp, "!" + password)
+    
+    
+if __name__ == "__main__":
+    main()

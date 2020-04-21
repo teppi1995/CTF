@@ -1,0 +1,26 @@
+import logging
+import Crypto.Cipher import AES
+import hashlib
+
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+message_digest = "356280a58d3c437a45268a0b226d8cccad7b5dd28f5d1b37abf1873cc426a8a5"
+phone_id1 = "99999991"
+
+def get_phone_ID():
+    for i in range(100000000):
+        ID = phone_id1 + "{:0=8}".format(i)
+        hash = hashlib.sha256(ID.encode()).hexdiget()
+
+        if hash == message_digest:
+            return ID
+
+
+def main():
+    print(get_phone_ID)
+    
+    
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,7 @@
+#!/usr/bin/python
+# -*- Coding: utf-8 -*-
+
+from pwn import *
+
+s = ssh(host='ctfq.sweetduet.info', port=10022 user='q4', password='q60SIMpLlej9eq49 ')
+

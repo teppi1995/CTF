@@ -1,0 +1,23 @@
+user00:FREQUENT:15491:0:99999:7:::
+user01:LATTER:15491:0:99999:7:::
+user02:ADDITIONAL:15491:0:99999:7:::
+user03:GENDER:15491:0:99999:7:::
+user04:__________:15491:0:99999:7:::
+user05:applies:15491:0:99999:7:::
+user06:SPIRITS:15491:0:99999:7:::
+user07:independent:15491:0:99999:7:::
+user08:ultimate:15491:0:99999:7:::
+user09:JENNY:15491:0:99999:7:::
+user10:HELD:15491:0:99999:7:::
+user11:SUFFERS:15491:0:99999:7:::
+user12:LEAVE:15491:0:99999:7:::
+user13:floating:15491:0:99999:7:::
+user14:zecht:15491:0:99999:7:::
+user15:opinion:15491:0:99999:7:::
+user16:QUESTION:15491:0:99999:7:::
+user17:karaoke:15491:0:99999:7:::
+user18:strange:15491:0:99999:7:::
+user19:zero:15491:0:99999:7:::
+user20:DELIGHT:15491:0:99999:7:::
+
+21 password hashes cracked, 1 left
