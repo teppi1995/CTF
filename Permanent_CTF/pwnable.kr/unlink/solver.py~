@@ -1,0 +1,6 @@
+from pwn import *
+
+shell = ssh('asm', 'pwnable.kr', 2222, password='guest')
+sh = shell.process('/bin/sh', env={'PS1':''})
+sh.sendline('nc 0 9026')
+

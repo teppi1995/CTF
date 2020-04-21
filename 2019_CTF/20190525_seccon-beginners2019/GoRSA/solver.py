@@ -1,0 +1,58 @@
+from socket import *
+from telnetlib import Telnet
+from time import time, sleep
+from sys import argv
+from struct import pack, unpack
+
+
+def read_until(s, c):
+    ret = ""
+    while 1:
+        ret += s.recv(1)
+        if ret.endswith(c):
+            return ret
+def gcd(a, b):
+	while b:
+		a, b = b, a % b
+
+        return a
+
+        
+print("[*] connect to [133.242.17.175 1337]")
+HOST = "133.242.17.175"
+PORT = 1337
+
+def main():
+    s = socket(AF_INET, SOCK_STREAM)
+    s.connect((HOST, PORT))
+
+    _ = read_until(s, "Encrypted flag is: ")
+    encrypted_flag = int(read_until(s, "\n"))
+
+    read_until(s, ">")
+    s.sendall("2" + "\n")    
+    e2 = int(read_until(s, "\n"))
+    read_until(s, ">")
+    s.sendall("3" + "\n")    
+    e3 = int(read_until(s, "\n"))
+    read_until(s, ">")
+    s.sendall("4" + "\n")    
+    e4 = int(read_until(s, "\n"))
+
+    _ = read_until(s, "The D was ")
+    D = int(read_until(s, "\n"))
+
+    e = 65537
+
+    N1 = gcd(2 ** e - e2, 3 ** e - e3)
+    N2 = gcd(3 ** e - e3, 4 ** e - e4)
+    N3 = gcd(4 ** e - e4, 2 ** e - e2)
+
+    print(hex(pow(encrypted_flag, D, N1)))
+    print(format(pow(encrypted_flag, D, N2), 'x'))
+    print(format(pow(encrypted_flag, D, N3), 'x').decode('hex'))
+    
+    
+    
+if __name__ == "__main__":
+    main()

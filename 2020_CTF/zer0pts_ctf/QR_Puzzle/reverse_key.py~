@@ -1,0 +1,11 @@
+lines = []
+
+with open ("key") as f:
+    lines = f.readlines()
+
+with open("reverse_key") as f:
+    for w in lines.reverse():
+        f.write(w)
+
+
+        

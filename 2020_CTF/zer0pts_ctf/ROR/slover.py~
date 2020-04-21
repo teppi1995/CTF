@@ -1,0 +1,12 @@
+from  bitarray import bitarray
+
+with open(path) as f:
+    flag_bit_array = []
+    
+    for line in f.readlines():
+        if int(line) % 2 == 0:
+            flag_bit_array.append(0)
+        else:
+            flag_bit_array.append(1)
+
+    print(flag_bit_array)

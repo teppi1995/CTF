@@ -1,0 +1,33 @@
+import gdb
+import re
+
+#address
+text_base = 0x0000555555554000
+
+mov_offset = 0x1848
+add_offset = 0x1858
+imul_offset = 0x1870
+xor_offset = 0x1888
+cmp_offset = 0x18a0
+jnz_offset = 0x18c0
+read_offset = 0x17e0
+write_offset = 0x1810
+
+
+def get_args():
+    rdi_34 = int(re.findall("\t0x([0-9a-f]{8})", gdb.execute("x/1wx $rdi + 0x34", to_string=True))[0], 16) & 0xffff
+    rdi_36 = int(re.findall("\t0x([0-9a-f]{8})", gdb.execute("x/1wx $rdi + 0x34", to_string=True))[0], 16) & 0xffff
+    return rdi_34, rdi_36
+    
+                 
+def main():
+    instructions = [mov_offset, add_offset, imul_offset, xor_offset, cmp_offset, jnz_offset, read_offset, write_offset]
+    for inst in instructions:
+        gdb.execute("break *0x{0;x}".format(text_base + inst))
+
+    gdb.execute("run target < input")
+
+
+    
+if __name__ == "__main__":
+    main()

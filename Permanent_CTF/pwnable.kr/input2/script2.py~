@@ -1,0 +1,34 @@
+import subprocess
+import os
+import socket
+import time
+
+# stage1
+arg=["a" for i in range(100)]
+arg[ord("A")] = ""
+arg[ord("B")] = "\x20\x0a\x0d"
+arg[ord("C")] = "40000"
+
+#stage2
+stdinr, stdinw = os.pipe()
+stderrr, stderrw = os.pipe()
+
+#stage3
+os.environ["\xde\xad\xbe\xef"] = "\xca\xfe\xba\xbe"
+
+#stage4
+with open("/tmp/\x0a", "wb") as f:
+    f.write("\x00\x00\x00\x00")
+
+os.chdir("/tmp/")
+os.symlink("/home/input2/flag", "/tmp/flag")
+
+s = subprocess.Popen(["./input"]+arg[1:], stdin = stdinr, stderr = stderrr)
+
+time.sleep(3)
+
+#stage5
+#stage5
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 40000))
+client.send("\xde\xad\xbe\xef")

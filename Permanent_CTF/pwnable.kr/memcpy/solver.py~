@@ -1,0 +1,9 @@
+from pwn import *
+
+shell = ssh('memcpy', 'pwnable.kr', 2222, password='guest')
+
+gdbscript = '''
+break main
+continue
+'''
+

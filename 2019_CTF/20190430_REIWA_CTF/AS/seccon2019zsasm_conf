@@ -1,0 +1,15 @@
+service seccon2019zsasm
+{
+    disable     = no
+    type        = UNLISTED
+    protocol    = tcp
+    port        = 55010
+    socket_type = stream
+    wait        = no
+    user        = root
+    group       = root
+    server      = /usr/bin/timeout
+    server_args = 5 /usr/sbin/chroot --userspec=1337:1337 /home/iwamura/rootdir/ /zsasm
+    per_source  = 254
+    rlimit_cpu	= 1
+}

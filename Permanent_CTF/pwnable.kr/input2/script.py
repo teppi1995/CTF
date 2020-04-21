@@ -1,0 +1,34 @@
+import subprocess
+import os
+import socket
+import time
+
+# stage1
+arg=["a" for i in range(100)]
+arg[ord("A")] = ""
+arg[ord("B")] = "\x20\x0a\x0d"
+arg[ord("C")] = "40000"
+
+#stage2
+with open("stdin.txt", "wb") as f:
+    f.write("\x00\x0a\x00\xff")
+
+with open("stderr.txt", "wb") as f:
+    f.write("\x00\x0a\x02\xff")
+
+#stage3
+os.environ["\xde\xad\xbe\xef"] = "\xca\xfe\xba\xbe"
+
+#stage4
+with open("\x0a", "wb") as f:
+    f.write("\x00\x00\x00\x00")
+    
+s = subprocess.Popen(["./input"]+arg[1:], stdin= open("stdin.txt", "r"), stderr = open("stderr.txt", "r"))
+
+time.sleep(3)
+
+#stage5
+#stage5
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect(('127.0.0.1', 40000))
+client.send("\xde\xad\xbe\xef")

@@ -1,0 +1,79 @@
+import gdb
+import re
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(message)s")
+#logging.disable(logging.CRITICAL)
+
+#address
+text_base = 0x0000555555554000
+
+mov_offset = 0x1848
+add_offset = 0x1858
+imul_offset = 0x1870
+xor_offset = 0x1888
+cmp_offset = 0x18a0
+jnz_offset = 0x18c0
+read_offset = 0x17e0
+write_offset = 0x1810
+ret_offset = 0x1830
+
+
+def get_args():
+    rdi_34 = int(re.findall("\t0x([0-9a-f]{8})", gdb.execute("x/1wx $rdi + 0x34", to_string=True))[0], 16)
+    rdi_36 = int(re.findall("\t0x([0-9a-f]{8})", gdb.execute("x/1wx $rdi + 0x36", to_string=True))[0], 16)
+    return rdi_34 & 0xffff, rdi_36 & 0xffff
+    
+                 
+def main():
+    instructions = [mov_offset, add_offset, imul_offset, xor_offset, cmp_offset, jnz_offset, read_offset, write_offset, ret_offset]
+    for inst in instructions:
+        gdb.execute("break *0x{0:x}".format(text_base + inst))
+
+    gdb.execute("run target")
+    #gdb.execute("run target < input")
+    
+    skip = False
+    log = ""
+    
+    while True:
+        try:
+            rip = int(re.findall("\t0x([0-9a-f]+)", gdb.execute("i r $rip", to_string=True))[0], 16)
+        except:
+            break
+        if rip == text_base + mov_offset:
+            arg1, arg2 = get_args()
+            log += ("[+] mov 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+            log += ("  [+] " + gdb.execute("i r $rdi", to_string=True))
+            
+        elif rip == (text_base + add_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] add 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + imul_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] imul 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + xor_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] xor 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + cmp_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] cmp 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + jnz_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] jnz 0x{:04x} to loc_17f1\n".format(arg1))
+        elif rip == (text_base + read_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] read 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + write_offset):
+            arg1, arg2 = get_args()
+            log += ("[+] write 0x{:04x}, 0x{:04x}\n".format(arg1, arg2))
+        elif rip == (text_base + ret_offset):
+            #arg1, arg2 = get_args()
+            log += ("[+] ret")
+
+        gdb.execute("c")
+
+    logging.info(log)
+            
+if __name__ == "__main__":
+    main()

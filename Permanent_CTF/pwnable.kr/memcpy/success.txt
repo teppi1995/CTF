@@ -1,0 +1,63 @@
+[*]counter = 0
+experiment 1 : memcpy with buffer size 13
+ellapsed CPU cycles for slow_memcpy : 2114
+ellapsed CPU cycles for fast_memcpy : 252
+
+[*]counter = 1
+
+experiment 2 : memcpy with buffer size 18
+ellapsed CPU cycles for slow_memcpy : 252
+ellapsed CPU cycles for fast_memcpy : 192
+
+[*]counter = 2
+
+experiment 3 : memcpy with buffer size 53
+ellapsed CPU cycles for slow_memcpy : 454
+ellapsed CPU cycles for fast_memcpy : 532
+
+[*]counter = 3
+
+experiment 4 : memcpy with buffer size 86
+ellapsed CPU cycles for slow_memcpy : 658
+ellapsed CPU cycles for fast_memcpy : 304
+
+[*]counter = 4
+
+experiment 5 : memcpy with buffer size 169
+ellapsed CPU cycles for slow_memcpy : 1278
+ellapsed CPU cycles for fast_memcpy : 750
+
+[*]counter = 5
+
+experiment 6 : memcpy with buffer size 440
+ellapsed CPU cycles for slow_memcpy : 3146
+ellapsed CPU cycles for fast_memcpy : 928
+
+[*]counter = 6
+
+experiment 7 : memcpy with buffer size 939
+ellapsed CPU cycles for slow_memcpy : 6656
+ellapsed CPU cycles for fast_memcpy : 1064
+
+[*]counter = 7
+
+experiment 8 : memcpy with buffer size 1436
+ellapsed CPU cycles for slow_memcpy : 10142
+ellapsed CPU cycles for fast_memcpy : 630
+
+[*]counter = 8
+
+experiment 9 : memcpy with buffer size 2329
+ellapsed CPU cycles for slow_memcpy : 16270
+ellapsed CPU cycles for fast_memcpy : 1388
+
+[*]counter = 9
+
+experiment 10 : memcpy with buffer size 6706
+ellapsed CPU cycles for slow_memcpy : 48274
+ellapsed CPU cycles for fast_memcpy : 2670
+
+[*] Stopped remote process 'dash' on pwnable.kr (pid 169092)
+
+thanks for helping my experiment!
+flag : 1_w4nn4_br34K_th3_m3m0ry_4lignm3nt
